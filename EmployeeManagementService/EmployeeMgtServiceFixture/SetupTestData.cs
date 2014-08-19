@@ -9,8 +9,7 @@ namespace EmployeeMgtServiceFixture
 {
     static class SetupTestData
     {
-        
-        public static void FillTestData(List<Employee> employeeList)
+       public static void FillTestData(List<Employee> employeeList)
         {
             Employee _employee = new Employee();
             _employee.Id = new Guid();
