@@ -13,10 +13,12 @@ namespace EmployeeManagementService
     public interface ICreateEmployeeService
     {
         [OperationContract]
-        Employee CreateEmployee(Employee e);
+        [FaultContract(typeof(FaultExceptionContract))]
+        Employee CreateEmployee(string name);
 
         [OperationContract]
-        string AddRemarks(Guid id, string remark); 
+        [FaultContract(typeof(FaultExceptionContract))]
+        void AddRemarks(Guid id, string remark); 
     }
 
     [ServiceContract]
@@ -27,10 +29,16 @@ namespace EmployeeManagementService
         List<Employee> GetAllEmployees();
         
        [OperationContract(Name = "SearchById")]
-        Employee GetEmployee(Guid Id);
+       [FaultContract(typeof(FaultExceptionContract))]
+        Employee GetEmployee(Guid id);
 
         [OperationContract(Name = "SearchByName")]
-        Employee GetEmployee(string Name);
+        [FaultContract(typeof(FaultExceptionContract))]
+        Employee GetEmployee(string name);
+
+        //[OperationContract]
+        //[FaultContract(typeof(FaultExceptionContract))]
+        //List<Employee> GetEmployee(string remark); 
     }
 
     [DataContract]

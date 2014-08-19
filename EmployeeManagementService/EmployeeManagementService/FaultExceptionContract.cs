@@ -10,12 +10,24 @@ namespace EmployeeManagementService
     public class FaultExceptionContract
     {
         [DataMember]
-        public string StatusCode { get; set; }
+        public string StatusCode
+        {
+            get;
+            set;
+        }
 
         [DataMember]
-        public string Message { get; set; }
+        public string Message
+        {
+            get;
+            set;
+        }
 
         [DataMember]
-        public string Description { get; set; }
+        public string Description
+        {
+            get;
+            set;
+        }
     }
 }

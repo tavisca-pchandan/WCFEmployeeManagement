@@ -134,6 +134,25 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IRetrieveEmployeeService_GetAllEmployees_FaultExceptionContractFault_Fault">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IRetrieveEmployeeService_SearchById_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -235,6 +254,9 @@
   <wsdl:message name="IRetrieveEmployeeService_GetAllEmployees_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAllEmployeesResponse" />
   </wsdl:message>
+  <wsdl:message name="IRetrieveEmployeeService_GetAllEmployees_FaultExceptionContractFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/EmployeeManagementService" name="detail" element="q1:FaultExceptionContract" />
+  </wsdl:message>
   <wsdl:message name="IRetrieveEmployeeService_SearchById_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchById" />
   </wsdl:message>
@@ -261,6 +283,7 @@
     <wsdl:operation name="GetAllEmployees">
       <wsdl:input wsaw:Action="http://tempuri.org/IRetrieveEmployeeService/GetAllEmployees" message="tns:IRetrieveEmployeeService_GetAllEmployees_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IRetrieveEmployeeService/GetAllEmployeesResponse" message="tns:IRetrieveEmployeeService_GetAllEmployees_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IRetrieveEmployeeService/GetAllEmployeesFaultExceptionContractFault" name="FaultExceptionContractFault" message="tns:IRetrieveEmployeeService_GetAllEmployees_FaultExceptionContractFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="SearchById">
       <wsdl:input wsaw:Action="http://tempuri.org/IRetrieveEmployeeService/SearchById" message="tns:IRetrieveEmployeeService_SearchById_InputMessage" />
@@ -305,6 +328,10 @@
         <wsp:PolicyReference URI="#WSHttpBinding_IRetrieveEmployeeService_GetAllEmployees_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="FaultExceptionContractFault">
+        <wsp:PolicyReference URI="#WSHttpBinding_IRetrieveEmployeeService_GetAllEmployees_FaultExceptionContractFault_Fault" />
+        <soap12:fault use="literal" name="FaultExceptionContractFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="SearchById">
       <soap12:operation soapAction="http://tempuri.org/IRetrieveEmployeeService/SearchById" style="document" />
@@ -338,7 +365,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>http://localhost:50536/EmployeeServiceImplementation.svc/ws</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>Priti-PC\Priti</Upn>
+          <Upn>pchandan@pune.tavisca.com</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

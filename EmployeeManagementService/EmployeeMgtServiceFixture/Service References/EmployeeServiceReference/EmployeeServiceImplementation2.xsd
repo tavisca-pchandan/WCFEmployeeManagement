@@ -22,6 +22,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Employee.Remark" nillable="true" type="tns:Employee.Remark" />
+  <xs:complexType name="FaultExceptionContract">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StatusCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FaultExceptionContract" nillable="true" type="tns:FaultExceptionContract" />
   <xs:complexType name="ArrayOfEmployee">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Employee" nillable="true" type="tns:Employee" />

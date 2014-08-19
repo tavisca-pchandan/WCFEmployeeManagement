@@ -8,76 +8,117 @@ using System.Text;
 
 namespace EmployeeManagementService
 {
-    
-    public class EmployeeServiceImplementation : ICreateEmployeeService,IRetrieveEmployeeService
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+    public class EmployeeServiceImplementation : ICreateEmployeeService, IRetrieveEmployeeService
     {
         /*To Do :
         1.Use proper method to persist the data... Remove Static
-        2. See how to throw conditional exception
+        2. Create and through Custom Exception for EmployeeNotFount rather than throwing ArgumentException
          */
         public static List<Employee> _employeeList = new List<Employee>();
 
-        public Employee CreateEmployee(Employee employee)
+        public Employee CreateEmployee(string name)
         {
-            employee.Id = Guid.NewGuid();
-            employee.Remarks = new List<Employee.Remark>();
-            employee.Remarks.Add(new Employee.Remark(DateTime.MinValue, null));
-            if (_employeeList == null)
-                throw new FaultException("Dataholder object does not found");
-            _employeeList.Add(employee);
-            return employee;
-        
+            try
+            {
+                Employee employee = new Employee();
+                employee.Id = Guid.NewGuid();
+                employee.Name = name;
+                employee.Remarks = new List<Employee.Remark>();
+                employee.Remarks.Add(new Employee.Remark(DateTime.MinValue, null));
+                if (_employeeList == null)
+                    throw new ArgumentNullException("Dataholder object is not present.");
+                _employeeList.Add(employee);
+                return employee;
+
+            }
+            catch (ArgumentNullException e)
+            {
+                FaultExceptionContract faultContract = new FaultExceptionContract();
+                faultContract.StatusCode = "Empty Database";
+                faultContract.Message = "Database does not contains any data";
+                faultContract.Description = "Error occurred in service";
+                throw new FaultException<FaultExceptionContract>(faultContract, new FaultReason(e.Message));
+            }
+
         }
 
-        public string AddRemarks(Guid id, string remark)
+        public void AddRemarks(Guid id, string remark)
         {
-            foreach (Employee employee in _employeeList)
+            try
             {
-                if (employee.Id.Equals(id))
-                {
-                    employee.Remarks.Add(new Employee.Remark(System.DateTime.Now, remark));
-                    return "Remark Added Successfully...";
-                }
+                var employee = _employeeList.Where(e => e.Id == id).FirstOrDefault();
+                if (employee == null) throw new ArgumentException("Employee not found");
+                employee.Remarks.Add(new Employee.Remark(System.DateTime.Now, remark));
             }
-            throw new FaultException("Record does not found");
+            catch (ArgumentException e)
+            {
+                FaultExceptionContract faultContract = new FaultExceptionContract();
+                faultContract.StatusCode = "Data not fount";
+                faultContract.Message = "Database does not contains such record";
+                faultContract.Description = "Error occurred in service";
+                throw new FaultException<FaultExceptionContract>(faultContract, new FaultReason(e.Message));
+            }
+            catch (CommunicationException e1)
+            {
+                FaultExceptionContract faultContract = new FaultExceptionContract();
+                faultContract.StatusCode = "Data not fount";
+                faultContract.Message = "Database does not contains such record";
+                faultContract.Description = "Error occurred in service";
+                throw new FaultException<FaultExceptionContract>(faultContract, new FaultReason(e1.Message));
+            }
         }
 
         public List<Employee> GetAllEmployees()
         {
-            //if (_employeeList.Count == 0)
-            //    throw new FaultException("Empty Database");
             try
             {
                 return _employeeList;
             }
             catch
             {
-                FaultExceptionContract _faultcontract = new FaultExceptionContract();
-                _faultcontract.StatusCode = "Empty Database";
-                _faultcontract.Message = "Database does not contains any data";
-                _faultcontract.Description = "Error occurred in service";
-                throw new FaultException<FaultExceptionContract>(_faultcontract);
+                FaultExceptionContract faultContract = new FaultExceptionContract();
+                faultContract.StatusCode = "Empty Database";
+                faultContract.Message = "Database does not contains any data";
+                faultContract.Description = "Error occurred in service";
+                throw new FaultException<FaultExceptionContract>(faultContract);
             }
         }
 
         public Employee GetEmployee(Guid id)
         {
-            foreach (Employee employee in _employeeList)
+            try
             {
-                if (employee.Id.Equals(id))
-                    return employee;
+                var employee = _employeeList.Where(e => e.Id == id).FirstOrDefault();
+                if (employee == null) throw new ArgumentException("Employee not found");
+                return employee;
             }
-            throw new FaultException("Record does not found");
+            catch (ArgumentException e)
+            {
+                FaultExceptionContract faultContract = new FaultExceptionContract();
+                faultContract.StatusCode = "Data not fount";
+                faultContract.Message = "Database does not contains such record";
+                faultContract.Description = "Error occurred in service";
+                throw new FaultException<FaultExceptionContract>(faultContract, new FaultReason(e.Message));
+            }
         }
 
         public Employee GetEmployee(string name)
         {
-            foreach (Employee employee in _employeeList)
+            try
             {
-                if (employee.Name == name)
-                    return employee;
+                var employee = _employeeList.Where(e => e.Name.Equals(name)).FirstOrDefault();
+                if (employee == null) throw new ArgumentException("Employee not found");
+                return employee;
             }
-            throw new FaultException("Record does not found");
+            catch (ArgumentException e)
+            {
+                 FaultExceptionContract faultContract = new FaultExceptionContract();
+                faultContract.StatusCode = "Data not fount";
+                faultContract.Message = "Database does not contains such record";
+                faultContract.Description = "Error occurred in service";
+                throw new FaultException<FaultExceptionContract>(faultContract, new FaultReason(e.Message));
+            }
         }
     }
 }

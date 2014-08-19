@@ -52,7 +52,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\DataSources\EmployeeManagementService.Employee.datasource" />
     <None Include="Service References\EmployeeServiceReference\Consumer.EmployeeServiceReference.Employee.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
