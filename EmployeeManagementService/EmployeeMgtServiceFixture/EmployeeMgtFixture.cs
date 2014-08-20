@@ -95,9 +95,7 @@ namespace EmployeeMgtServiceFixture
             List<Employee> empList = new List<Employee>();
             empList = _readClient.GetAllEmployees();
         }
-
-
-
+        
         [TestMethod]
         [ExpectedException(typeof(System.ServiceModel.FaultException<FaultExceptionContract>))]
         public void AddRemarkException()
